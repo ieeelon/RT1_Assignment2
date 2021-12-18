@@ -11,7 +11,7 @@ std_srvs::Empty reset;
 
 geometry_msgs::Twist transformation_msg;
 
-
+//Declaration of variables required for further calculations
 float safe_distance = 0.9;
 float speed = 1;
 float orientation = 0;
@@ -32,6 +32,12 @@ float closest(float dist[], int resolution)
    }
    return buf;
 }
+
+/*
+This function, based on the three inputs which are distances to obstacles from the right, left and front sides of the robot
+decisdes which scenrario to follow based on the surroundings of the robot, i.e. how to avoid collision with obstacles 
+by changing speed and orientation
+*/
 void decision_tree(float right, float center, float left)
 {
 
@@ -90,7 +96,10 @@ void decision_tree(float right, float center, float left)
     
 }
 
-//Function to consider user input for speed and reset
+/*
+Function to consider user input for speed and reset. Essentially, it is just w, s - for increasing speed and r - for reset.
+This function publishes to subscriber node.
+*/
 bool setSpeed(second_assignment::Service::Request &request, second_assignment::Service::Response &response)
 
 {
@@ -125,7 +134,12 @@ bool setSpeed(second_assignment::Service::Request &request, second_assignment::S
     	return true;
 }
 
-    
+/*
+This function works in two steps.
+The first one looks through the arrays of obstacles on the right, left and front of the robot.
+This is required to find the closest obstacle. closest() - does exactly what was stated before.
+After that, closest obstacles are sent to decision_tree() to decide which path to choose
+*/    
     void controller(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
     float right[280] , center[160] , left[280];
@@ -152,7 +166,7 @@ bool setSpeed(second_assignment::Service::Request &request, second_assignment::S
     
 }
 
-
+//This is main, it handles the communication with subscriber and robot image
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "publisher");

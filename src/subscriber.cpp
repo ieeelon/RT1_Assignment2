@@ -9,6 +9,7 @@
 
 ros::ServiceClient ServiceClient;
 
+//This part defines the basic UI. It then sends the letter user input to subscriber to change the speed of robot or reset it.
 void message(const sensor_msgs::LaserScan::ConstPtr& msg){
 	second_assignment::Service Service;
 	
@@ -32,6 +33,8 @@ void message(const sensor_msgs::LaserScan::ConstPtr& msg){
         std::cout <<"\n\nUndefined input\n\n";
         }
 }
+
+//Main is for communcation
 int main(int argc, char **argv){
 	ros::init(argc,argv,"subscriber");
 	ros::NodeHandle handler;
